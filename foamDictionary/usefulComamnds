@@ -1,0 +1,20 @@
+
+# show the foam tutorials folder
+echo $FOAM_TUTORIALS
+
+# search for a text in current directory recursively (ie files in folders and subfolders) 
+grep -r $textPattern
+
+# foamDictionary
+
+# to check a file
+foamDictionary $dict_path
+
+# to add an entry
+foamDictionary $dict_path -entry $entryName -add $entryValue
+
+# to remove an entry
+foamDictionary $dict_path -entry $entryName -remove
+
+# to edit an entry
+foamDictionary $dict_path -entry $entryName -set $entryValue

@@ -1,0 +1,24 @@
+echo "hello world"
+
+#!/bin/bash
+cd "${0%/*}" || exit                                # Run from this directory
+
+
+# define function
+add()
+{
+
+# remember hastags or # is for commenting
+# this script uses python, make sure it is installed 
+	echo $1
+	echo $2
+	python -c "print($1+$2)"
+
+}
+
+# run funcction with 2 inputs
+add 8 3
+
+# pass the outputs of the function into x
+x=$(add 8 3)
+echo $x

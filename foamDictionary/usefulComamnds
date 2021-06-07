@@ -18,3 +18,23 @@ foamDictionary $dict_path -entry $entryName -remove
 
 # to edit an entry
 foamDictionary $dict_path -entry $entryName -set $entryValue
+
+# to print only this entry
+foamDictionary $dict_path -entry $entryName
+
+# print only the value of the entry
+foamDictionary $dict_path -entry $entryName -value
+
+# change BC
+foamDictionary $dict_path -entry boundaryField.$patchName.type -set $yourBC
+
+# print BC type
+foamDictionary $dict_path -entry boundaryField.$patchName.type 
+
+# print BC 
+foamDictionary $dict_path -entry boundaryField.$patchName 
+
+# use foam dictionary with problematic syntax, (print grad of pressure scheme)
+foamDictionary exampleFile/system/fvSchemes -entry gradSchemes."grad(p)"
+
+

@@ -87,12 +87,87 @@ do
     ( cd $caseName && runApplication $(getApplication) )
 done
 }
+########### functions ###########
 
+# copying case
 copyCase()
 {
 	foamCloneCase -l $1 $2
 }
 
-copyCase exampleFile cavitySwirl
+# edit the blockMesh
 
+setBlockMesh()
+{
+
+#( movingWall { type wall ; faces ( ( 3 7 6 2 ) ) ; } fixedWalls { type wall ; faces ( ( 0 4 7 3 ) ( 2 6 5 1 ) ( 1 5 4 0 ) ) ; } frontAndBack { type empty ; faces ( ( 0 3 2 1 ) ( 4 5 6 7 ) ) ; } )
+
+	foamDictionary $1/system/blockMeshDict -entry boundary -set "
+
+( 
+
+topWall { type wall ; faces ( ( 3 7 6 2 ) ) ; }
+
+fixedWalls { type wall ; faces ( ( 0 4 7 3 ) ( 2 6 5 1 ) ) ; }
+
+bottomWall { type wall ; faces ( ( 1 5 4 0 ) ) ;  }
+
+frontAndBack { type empty ; faces ( ( 0 3 2 1 ) ( 4 5 6 7 ) ) ; }
+
+)
+"
+}
+
+setBCs_part1()
+{
+
+foamDictionary $1/0/p -entry boundaryField.movingWall -remove
+foamDictionary $1/0/p -entry boundaryField.topWall -add "{}"
+foamDictionary $1/0/p -entry boundaryField.topWall.type -add zeroGradient
+
+foamDictionary $1/0/p -entry boundaryField.bottomWall -add "{}"
+foamDictionary $1/0/p -entry boundaryField.bottomWall.type -add zeroGradient
+
+movingWallBC=$(foamDictionary cavitySwirl/0/U -entry boundaryField.movingWall -value)
+foamDictionary $1/0/U -entry boundaryField.topWall -add "$movingWallBC"
+foamDictionary $1/0/U -entry boundaryField.movingWall -remove
+
+foamDictionary $1/0/U -entry boundaryField.bottomWall -add "{}"
+foamDictionary $1/0/U -entry boundaryField.bottomWall.type -add noSlip
+
+
+}
+
+addTime()
+{
+initialTime=$(foamDictionary $1/system/controlDict -entry endTime -value)
+
+# second variable is how much time i wanna add in seconds
+finalTime=$(python -c "print($initialTime+$2)")
+
+foamDictionary $1/system/controlDict -entry endTime -set $finalTime
+}
+
+setBCs_part2()
+{
+latestTime=$(ls $1 -1 | sort -n | tail -n 1)
+
+movingWallBC=$(foamDictionary cavitySwirl/$latestTime/U -entry boundaryField.topWall -value)
+foamDictionary $1/$latestTime/U -entry boundaryField.bottomWall -set "$movingWallBC"
+foamDictionary $1/$latestTime/U -entry boundaryField.topWall.type -set noSlip
+foamDictionary $1/$latestTime/U -entry boundaryField.topWall.value -remove
+
+}
+
+
+# making an new case
+copyCase exampleFile cavitySwirl
+setBlockMesh cavitySwirl
+blockMesh -case cavitySwirl
+setBCs_part1 cavitySwirl
+
+icoFoam -case cavitySwirl
+
+addTime cavitySwirl 10
+setBCs_part2 cavitySwirl
 #------------------------------------------------------------------------------

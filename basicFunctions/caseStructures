@@ -1,0 +1,61 @@
+#!/bin/bash
+
+#for caseName in $cavityCases
+#do
+#    case "$caseName" in
+#    cavityFine)
+#        cloneCase cavity $caseName
+#        setCavityFine
+#      ;;
+#
+#    cavityHighRe)
+#        cloneCase cavity $caseName
+#        setCavityHighRe
+#        copySolutionDirs $caseName cavity
+#        ;;
+#    esac
+#
+#    ( cd $caseName && runApplication blockMesh )
+#
+#    case "$caseName" in
+#    cavityFine | cavityGrade)
+#        runMapFieldsConsistent $previousCase $caseName
+#        ;;
+#    cavityClipped)
+#        cp -r $caseName/0 $caseName/0.5
+#        runMapFields cavity $caseName
+#        ;;
+#    esac
+#
+#    previousCase="$caseName"
+#    ( cd $caseName && runApplication $(getApplication) )
+#done
+
+
+# case structures are like
+# if ... do .. else .. end
+
+# in a typical if loop
+
+# variable = (something...)
+
+# if variable=true
+# do something
+# else
+# do something else
+# end
+
+controlVar=false
+
+case "$controlVar" in
+	true)
+	echo "i am true"
+
+	;;
+	false)
+	echo "i am false"
+
+	;;
+
+esac
+

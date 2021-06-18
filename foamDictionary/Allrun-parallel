@@ -200,7 +200,7 @@ mpirun -np $2 icoFoam -case $1 -parallel
 reconstructPar -case $1
 }
 
-runVar=serial
+runVar=parallel
 
 case $runVar in
 

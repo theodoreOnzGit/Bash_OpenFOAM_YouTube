@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#for caseName in $cavityCases
+#do
+#    case "$caseName" in
+#    cavityFine)
+#        cloneCase cavity $caseName
+#        setCavityFine
+#      ;;
+#
+#    cavityHighRe)
+#        cloneCase cavity $caseName
+#        setCavityHighRe
+#        copySolutionDirs $caseName cavity
+#        ;;
+#    esac
+#
+#    ( cd $caseName && runApplication blockMesh )
+#
+#    case "$caseName" in
+#    cavityFine | cavityGrade)
+#        runMapFieldsConsistent $previousCase $caseName
+#        ;;
+#    cavityClipped)
+#        cp -r $caseName/0 $caseName/0.5
+#        runMapFields cavity $caseName
+#        ;;
+#    esac
+#
+#    previousCase="$caseName"
+#    ( cd $caseName && runApplication $(getApplication) )
+#done
+
+
+speech="i love openfoam and bash"
+
+for word in $speech
+do 
+
+	echo $word
+
+done
+
+# note, this is similar to:
+#for i=1:10
+
+#print i
+
+#end

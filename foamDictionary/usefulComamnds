@@ -37,4 +37,5 @@ foamDictionary $dict_path -entry boundaryField.$patchName
 # use foam dictionary with problematic syntax, (print grad of pressure scheme)
 foamDictionary exampleFile/system/fvSchemes -entry gradSchemes."grad(p)"
 
-
+# get a foam dictionary
+foamGetDict -case $casePath $dictionaryName

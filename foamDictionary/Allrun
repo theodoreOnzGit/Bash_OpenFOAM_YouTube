@@ -161,13 +161,42 @@ foamDictionary $1/$latestTime/U -entry boundaryField.topWall.value -remove
 
 
 # making an new case
-copyCase exampleFile cavitySwirl
-setBlockMesh cavitySwirl
-blockMesh -case cavitySwirl
-setBCs_part1 cavitySwirl
+runTestCase()
+{
+copyCase exampleFile $1
+setBlockMesh $1
+blockMesh -case $1
+setBCs_part1 $1
 
-icoFoam -case cavitySwirl
+icoFoam -case $1
 
-addTime cavitySwirl 10
-setBCs_part2 cavitySwirl
+addTime $1 10
+setBCs_part2 $1
+icoFoam -case $1
+}
+
+runTestCase_parallel()
+{
+copyCase exampleFile $1
+setBlockMesh $1
+blockMesh -case $1
+setBCs_part1 $1
+
+foamGetDict -case $1 decomposeParDict
+foamDictionary $1/system/decomposeParDict -entry numberOfSubdomains -set $2
+decomposePar -case $1
+
+mpirun -np $2 icoFoam -case $1 -parallel
+reconstructPar -case $1
+
+addTime $1 10
+setBCs_part2 $1
+
+decomposePar -case $1
+mpirun -np $2 icoFoam -case $1 -parallel
+reconstructPar -case $1
+}
+
+
+runTestCase_parallel cavitySwirl 2
 #------------------------------------------------------------------------------
